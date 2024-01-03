@@ -1,13 +1,9 @@
 import { Injectable } from '@nestjs/common'
-import { ApiConfigService } from '../config'
 import { CacheService } from '@multiversx/sdk-nestjs-cache'
 
 @Injectable()
 export class DataService {
-  constructor(
-    private readonly apiConfigService: ApiConfigService,
-    protected readonly cachingService: CacheService
-  ) {}
+  constructor(protected readonly cachingService: CacheService) {}
 
   async mintStreamNft() {
     // const dataNfts = DataNft.createManyFromApi()

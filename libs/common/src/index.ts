@@ -1,7 +1,6 @@
 export * from './abi'
 export * from './admin'
 export * from './contract'
-export * from './database'
 export * from './entities'
 export * from './metrics'
 export * from './pubsub'
