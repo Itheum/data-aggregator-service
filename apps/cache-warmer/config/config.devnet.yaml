@@ -1,0 +1,12 @@
+urls:
+  api: 'https://devnet-api.multiversx.com'
+  redis: '127.0.0.1'
+contracts:
+  aggregator: 'erd1qqqqqqqqqqqqqpgquydchaqp6yj0g0lqfdh088lqdjgxrvvql3tswdmz8q'
+features:
+  cacheWarmer:
+    enabled: true
+    port: 5201
+  privateApi:
+    enabled: false
+    port: 4000
