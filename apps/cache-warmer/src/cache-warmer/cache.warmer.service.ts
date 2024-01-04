@@ -1,15 +1,13 @@
 import { Injectable } from '@nestjs/common'
+import { AppService } from '@mvx-monorepo/common/app'
 import { Cron, CronExpression } from '@nestjs/schedule'
-import { ContractService } from '@mvx-monorepo/common/contract/contract.service'
 
 @Injectable()
 export class CacheWarmerService {
-  constructor(
-    private readonly contractService: ContractService,
-  ) {}
+  constructor(private readonly appService: AppService) {}
 
   @Cron(CronExpression.EVERY_5_SECONDS)
   async syncApps() {
-    this.contractService.getAppDelegations(0)
+    await this.appService.syncApps()
   }
 }

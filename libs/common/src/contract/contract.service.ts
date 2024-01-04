@@ -1,13 +1,13 @@
 import { CacheInfo } from '../utils'
-import { Delegation } from './types'
 import { Injectable } from '@nestjs/common'
 import { ApiConfigService } from '../config'
+import { AppInfo, Delegation } from './types'
 import { DataNft } from '@itheum/sdk-mx-data-nft'
 import { CacheService } from '@multiversx/sdk-nestjs-cache'
 import { toTypedAppInfo, toTypedDelegation } from './helpers'
 import * as aggregatorAbiJson from './data-aggregator.abi.json'
-import { createDataNftsFromDelegations } from '../data/helpers'
 import { AbiRegistry, Address, ResultsParser, SmartContract } from '@multiversx/sdk-core'
+import { createDataNftsFromDelegations } from '../data/helpers'
 
 @Injectable()
 export class ContractService {
@@ -18,12 +18,9 @@ export class ContractService {
 
   async getApps() {
     const data = await this.queryContract('getApps', [])
-    const apps = data.map(toTypedAppInfo)
+    const apps: AppInfo[] = data.map(toTypedAppInfo)
 
-    const cacheInfo = CacheInfo.Apps()
-    this.cachingService.set(cacheInfo.key, apps, cacheInfo.ttl)
-
-    console.log('apps', await this.cachingService.get(cacheInfo.key))
+    return apps
   }
 
   async getAppDelegations(appId: number) {
