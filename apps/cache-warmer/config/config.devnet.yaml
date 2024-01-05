@@ -2,7 +2,7 @@ urls:
   api: 'https://devnet-api.multiversx.com'
   redis: '127.0.0.1'
 contracts:
-  aggregator: 'erd1qqqqqqqqqqqqqpgquydchaqp6yj0g0lqfdh088lqdjgxrvvql3tswdmz8q'
+  aggregator: 'erd1qqqqqqqqqqqqqpgqttja5hhug9rw0umu25ptq3reqmqrc4rll3tsqtvm0n'
 features:
   cacheWarmer:
     enabled: true

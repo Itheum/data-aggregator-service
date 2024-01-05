@@ -269,6 +269,10 @@
             "type": "struct",
             "fields": [
                 {
+                    "name": "id",
+                    "type": "u64"
+                },
+                {
                     "name": "name",
                     "type": "bytes"
                 },
