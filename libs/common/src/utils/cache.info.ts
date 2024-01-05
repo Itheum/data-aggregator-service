@@ -1,3 +1,4 @@
+import { AppInfo } from '../app'
 import { Constants } from '@multiversx/sdk-nestjs-common'
 
 export class CacheInfo {
@@ -11,9 +12,9 @@ export class CacheInfo {
     }
   }
 
-  static AppDelegations(appId: number): CacheInfo {
+  static AppDelegations(app: AppInfo): CacheInfo {
     return {
-      key: `appDelegations:${appId}`,
+      key: `appDelegations:${app.id}`,
       ttl: Constants.oneMonth() * 12,
     }
   }

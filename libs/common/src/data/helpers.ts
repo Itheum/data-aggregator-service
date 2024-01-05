@@ -1,4 +1,4 @@
-import { Delegation } from '../contract'
+import { Delegation } from '../delegation'
 import { DataNft } from '@itheum/sdk-mx-data-nft'
 
 export const createDataNftsFromDelegations = async (delegations: Delegation[]) =>

@@ -1,19 +1,17 @@
-import { CacheInfo } from '../utils'
+import { AppInfo } from '../app'
+import { Delegation } from '../delegation'
 import { Injectable } from '@nestjs/common'
 import { ApiConfigService } from '../config'
-import { AppInfo, Delegation } from './types'
-import { DataNft } from '@itheum/sdk-mx-data-nft'
 import { CacheService } from '@multiversx/sdk-nestjs-cache'
 import { toTypedAppInfo, toTypedDelegation } from './helpers'
 import * as aggregatorAbiJson from './data-aggregator.abi.json'
 import { AbiRegistry, Address, ResultsParser, SmartContract } from '@multiversx/sdk-core'
-import { createDataNftsFromDelegations } from '../data/helpers'
 
 @Injectable()
 export class ContractService {
   constructor(
     private readonly apiConfigService: ApiConfigService,
-    protected readonly cachingService: CacheService
+    protected readonly cacheService: CacheService
   ) {}
 
   async getApps() {
@@ -27,21 +25,13 @@ export class ContractService {
     const data = await this.queryContract('getDelegations', [appId])
     const delegations: Delegation[] = data.map(toTypedDelegation)
 
-    const cacheInfo = CacheInfo.AppDelegations(appId)
-    this.cachingService.set(cacheInfo.key, delegations, cacheInfo.ttl)
-
-    DataNft.setNetworkConfig('devnet')
-
-    const dataNfts = await createDataNftsFromDelegations(delegations)
-
-    // console.log('app delegations', await this.cachingService.get(cacheInfo.key))
-    console.log('app delegations', dataNfts)
+    return delegations
   }
 
   private async queryContract(endpoint: string, args: any[]) {
     const abi = AbiRegistry.create(aggregatorAbiJson)
 
-    const contractAddress = new Address(this.apiConfigService.getAggregatorContract())
+    const contractAddress = new Address(this.apiConfigService.getAggregatorContractAddress())
     const contract = new SmartContract({ address: contractAddress, abi })
     const interaction = contract.methods[endpoint](args)
     const res = await this.apiConfigService.getNetworkProvider().queryContract(interaction.buildQuery())

@@ -1,6 +1,8 @@
-import { AppInfo, Delegation } from './types'
+import { AppInfo } from '../app'
+import { Delegation } from '../delegation'
 
 export const toTypedAppInfo = (value: any): AppInfo => ({
+  id: value.id.toNumber(),
   name: value.name.toString(),
   manager: value.manager.toString(),
   createdAt: value.created_at.toNumber(),

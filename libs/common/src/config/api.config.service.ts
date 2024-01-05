@@ -18,7 +18,7 @@ export class ApiConfigService {
   getNetworkProvider(): ApiNetworkProvider {
     return new ApiNetworkProvider(this.getApiUrl(), {
       timeout: this.getAxiosTimeout(),
-    });
+    })
   }
 
   getSwaggerUrls(): string[] {
@@ -280,12 +280,12 @@ export class ApiConfigService {
     return this.configService.get<string[]>('nativeAuth.acceptedOrigins') ?? []
   }
 
-  getAggregatorContract(): string {
-    const contract = this.configService.get<string>('contracts.aggregator');
+  getAggregatorContractAddress(): string {
+    const contract = this.configService.get<string>('contracts.aggregator')
     if (!contract) {
-      throw new Error('No aggregator contract present');
+      throw new Error('No aggregator contract present')
     }
 
-    return contract;
+    return contract
   }
 }
