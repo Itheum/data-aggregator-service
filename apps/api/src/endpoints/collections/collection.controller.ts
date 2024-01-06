@@ -1,27 +1,26 @@
 import { ApiResponse } from '@nestjs/swagger'
-import { CacheService } from '@multiversx/sdk-nestjs-cache'
-import { NativeAuthAdminGuard, NativeAuthGuard } from '@multiversx/sdk-nestjs-auth'
-import { Controller, Get, HttpException, HttpStatus, Param, Query, UseGuards } from '@nestjs/common'
+import { Controller, Get, Param } from '@nestjs/common'
 
 @Controller()
-export class CacheController {
-  constructor(private readonly cacheService: CacheService) {}
+export class CollectionsController {
+  constructor() {}
 
-  @UseGuards(NativeAuthGuard, NativeAuthAdminGuard)
-  @Get('/caching/:key')
-  @ApiResponse({ status: 200, description: 'The cache value for one key', type: String })
-  @ApiResponse({ status: 404, description: 'Key not found' })
-  async getCache(@Param('key') key: string): Promise<unknown> {
-    const value = await this.cacheService.getRemote(key)
-    if (!value) {
-      throw new HttpException('Key not found', HttpStatus.NOT_FOUND)
-    }
-    return JSON.stringify(value)
+  // TODO: @UseGuards(NativeAuthGuard)
+  @Get('/collections')
+  @ApiResponse({ status: 200 })
+  async index(@Param('collection') key: string): Promise<unknown> {
+    return JSON.stringify({
+      collection: key,
+    })
   }
 
-  @UseGuards(NativeAuthGuard, NativeAuthAdminGuard)
-  @Get('/caching')
-  async getKeys(@Query('keys') keys: string): Promise<string[]> {
-    return await this.cacheService.getKeys(keys)
+  // TODO: @UseGuards(NativeAuthGuard)
+  @Get('/collections/:collection')
+  @ApiResponse({ status: 200 })
+  @ApiResponse({ status: 404 })
+  async show(@Param('collection') key: string): Promise<unknown> {
+    return {
+      collection: key,
+    }
   }
 }
