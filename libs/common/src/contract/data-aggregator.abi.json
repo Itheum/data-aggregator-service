@@ -1,0 +1,311 @@
+{
+    "buildInfo": {
+        "rustc": {
+            "version": "1.71.0-nightly",
+            "commitHash": "f9a6b71580cd53dd4491d9bb6400f7ee841d9c22",
+            "commitDate": "2023-05-05",
+            "channel": "Nightly",
+            "short": "rustc 1.71.0-nightly (f9a6b7158 2023-05-05)"
+        },
+        "contractCrate": {
+            "name": "data-aggregator",
+            "version": "0.0.0"
+        },
+        "framework": {
+            "name": "multiversx-sc",
+            "version": "0.45.2"
+        }
+    },
+    "name": "DataAggregator",
+    "constructor": {
+        "inputs": [],
+        "outputs": []
+    },
+    "endpoints": [
+        {
+            "name": "upgrade",
+            "mutability": "mutable",
+            "inputs": [],
+            "outputs": []
+        },
+        {
+            "name": "addAdmin",
+            "mutability": "mutable",
+            "inputs": [
+                {
+                    "name": "address",
+                    "type": "Address"
+                }
+            ],
+            "outputs": []
+        },
+        {
+            "name": "removeAdmin",
+            "mutability": "mutable",
+            "inputs": [
+                {
+                    "name": "address",
+                    "type": "Address"
+                }
+            ],
+            "outputs": []
+        },
+        {
+            "name": "getAdmins",
+            "mutability": "readonly",
+            "inputs": [],
+            "outputs": [
+                {
+                    "type": "variadic<Address>",
+                    "multi_result": true
+                }
+            ]
+        },
+        {
+            "name": "registerApp",
+            "mutability": "mutable",
+            "inputs": [
+                {
+                    "name": "name",
+                    "type": "bytes"
+                }
+            ],
+            "outputs": [
+                {
+                    "type": "u64"
+                }
+            ]
+        },
+        {
+            "name": "unregisterApp",
+            "mutability": "mutable",
+            "inputs": [
+                {
+                    "name": "app_id",
+                    "type": "u64"
+                }
+            ],
+            "outputs": []
+        },
+        {
+            "name": "addDataCollection",
+            "mutability": "mutable",
+            "inputs": [
+                {
+                    "name": "app_id",
+                    "type": "u64"
+                },
+                {
+                    "name": "collection",
+                    "type": "TokenIdentifier"
+                }
+            ],
+            "outputs": []
+        },
+        {
+            "name": "removeDataCollection",
+            "mutability": "mutable",
+            "inputs": [
+                {
+                    "name": "app_id",
+                    "type": "u64"
+                },
+                {
+                    "name": "collection",
+                    "type": "TokenIdentifier"
+                }
+            ],
+            "outputs": []
+        },
+        {
+            "name": "addDefaultDataCollection",
+            "mutability": "mutable",
+            "inputs": [
+                {
+                    "name": "collection",
+                    "type": "TokenIdentifier"
+                }
+            ],
+            "outputs": []
+        },
+        {
+            "name": "removeDefaultDataCollection",
+            "mutability": "mutable",
+            "inputs": [
+                {
+                    "name": "collection",
+                    "type": "TokenIdentifier"
+                }
+            ],
+            "outputs": []
+        },
+        {
+            "name": "getApps",
+            "mutability": "readonly",
+            "inputs": [],
+            "outputs": [
+                {
+                    "type": "variadic<AppInfo>",
+                    "multi_result": true
+                }
+            ]
+        },
+        {
+            "name": "getNextAppId",
+            "mutability": "readonly",
+            "inputs": [],
+            "outputs": [
+                {
+                    "type": "u64"
+                }
+            ]
+        },
+        {
+            "name": "getAppInfo",
+            "mutability": "readonly",
+            "inputs": [
+                {
+                    "name": "app_id",
+                    "type": "u64"
+                }
+            ],
+            "outputs": [
+                {
+                    "type": "AppInfo"
+                }
+            ]
+        },
+        {
+            "name": "getDataCollectionDefaults",
+            "mutability": "readonly",
+            "inputs": [],
+            "outputs": [
+                {
+                    "type": "variadic<TokenIdentifier>",
+                    "multi_result": true
+                }
+            ]
+        },
+        {
+            "name": "delegate",
+            "mutability": "mutable",
+            "payableInTokens": [
+                "*"
+            ],
+            "inputs": [
+                {
+                    "name": "app_id",
+                    "type": "u64"
+                },
+                {
+                    "name": "segment",
+                    "type": "bytes"
+                },
+                {
+                    "name": "user",
+                    "type": "optional<Address>",
+                    "multi_arg": true
+                }
+            ],
+            "outputs": []
+        },
+        {
+            "name": "undelegate",
+            "mutability": "mutable",
+            "inputs": [
+                {
+                    "name": "app_id",
+                    "type": "u64"
+                },
+                {
+                    "name": "nfts",
+                    "type": "variadic<multi<TokenIdentifier,u64>>",
+                    "multi_arg": true
+                }
+            ],
+            "outputs": []
+        },
+        {
+            "name": "getDelegations",
+            "mutability": "readonly",
+            "inputs": [
+                {
+                    "name": "app_id",
+                    "type": "u64"
+                }
+            ],
+            "outputs": [
+                {
+                    "type": "variadic<Delegation>",
+                    "multi_result": true
+                }
+            ]
+        },
+        {
+            "name": "getDelegationsByUser",
+            "mutability": "readonly",
+            "inputs": [
+                {
+                    "name": "app_id",
+                    "type": "u64"
+                },
+                {
+                    "name": "address",
+                    "type": "Address"
+                }
+            ],
+            "outputs": [
+                {
+                    "type": "variadic<Delegation>",
+                    "multi_result": true
+                }
+            ]
+        }
+    ],
+    "esdtAttributes": [],
+    "hasCallback": false,
+    "types": {
+        "AppInfo": {
+            "type": "struct",
+            "fields": [
+                {
+                    "name": "id",
+                    "type": "u64"
+                },
+                {
+                    "name": "name",
+                    "type": "bytes"
+                },
+                {
+                    "name": "manager",
+                    "type": "Address"
+                },
+                {
+                    "name": "created_at",
+                    "type": "u64"
+                },
+                {
+                    "name": "data_collections",
+                    "type": "List<TokenIdentifier>"
+                }
+            ]
+        },
+        "Delegation": {
+            "type": "struct",
+            "fields": [
+                {
+                    "name": "collection",
+                    "type": "TokenIdentifier"
+                },
+                {
+                    "name": "nonce",
+                    "type": "u64"
+                },
+                {
+                    "name": "segment",
+                    "type": "bytes"
+                }
+            ]
+        }
+    }
+}
