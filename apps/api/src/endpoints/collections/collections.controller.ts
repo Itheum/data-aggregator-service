@@ -2,7 +2,7 @@ import { ApiResponse } from '@nestjs/swagger'
 import { AppService } from '@mvx-monorepo/common'
 import { DataValue } from './entities/data.value'
 import { DelegationService } from '@mvx-monorepo/common/delegation'
-import { Controller, Get, Headers, NotFoundException, Param } from '@nestjs/common'
+import { Controller, Get, NotFoundException, Param } from '@nestjs/common'
 
 @Controller()
 export class CollectionsController {
@@ -21,10 +21,10 @@ export class CollectionsController {
   }
 
   // TODO: @UseGuards(NativeAuthGuard)
-  @Get('/collections/:collection')
+  @Get('apps/:appid/collections/:collection')
   @ApiResponse({ status: 200 })
   @ApiResponse({ status: 404 })
-  async show(@Param('collection') key: string, @Headers('app-id') appId: number) {
+  async show(@Param('appid') appId: string, @Param('collection') key: string) {
     const app = await this.appService.getAppById(+appId)
 
     if (!app) {
