@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common'
 import { AuthController } from './auth/auth.controller'
 import configuration from '../../../api/config/configuration'
 import { EndpointsServicesModule } from './endpoints.services.module'
-import { CollectionsController } from './collections/collection.controller'
+import { CollectionsController } from './collections/collections.controller'
 import {
   AppService,
   ContractService,
