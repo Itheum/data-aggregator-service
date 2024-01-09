@@ -7,12 +7,7 @@ export class AppConfigService {
   constructor(private readonly configService: ConfigService) {}
 
   get apiUrl(): string {
-    const apiUrl = this.configService.get<string>('services.chain.apiUrl')
-    if (!apiUrl) {
-      throw new Error('No api url present')
-    }
-
-    return apiUrl
+    return this.configService.getOrThrow<string>('services.chain.apiUrl')
   }
 
   get networkProvider(): ApiNetworkProvider {
@@ -22,12 +17,7 @@ export class AppConfigService {
   }
 
   get swaggerUrls(): string[] {
-    const swaggerUrls = this.configService.get<string[]>('services.swagger.urls')
-    if (!swaggerUrls) {
-      throw new Error('No swagger urls present')
-    }
-
-    return swaggerUrls
+    return this.configService.getOrThrow<string[]>('services.swagger.urls')
   }
 
   get redisUrl(): string {
