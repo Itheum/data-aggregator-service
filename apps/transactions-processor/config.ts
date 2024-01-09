@@ -1,4 +1,8 @@
 export const config = () => ({
+  app: {
+    name: process.env.APP_NAME || 'aggregator',
+    env: process.env.APP_ENV || 'mainnet',
+  },
   features: {
     transactionProcessor: {
       enabled: process.env.TX_PROCESSOR_ENABLED !== 'false',

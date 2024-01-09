@@ -1,4 +1,8 @@
 export const config = () => ({
+  app: {
+    name: process.env.APP_NAME || 'aggregator',
+    env: process.env.APP_ENV || 'mainnet',
+  },
   features: {
     cacheWarmer: {
       enabled: process.env.CACHE_WARMER_ENABLED !== 'false',

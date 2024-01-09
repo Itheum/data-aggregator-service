@@ -6,6 +6,14 @@ import { ApiNetworkProvider } from '@multiversx/sdk-network-providers'
 export class AppConfigService {
   constructor(private readonly configService: ConfigService) {}
 
+  get appName(): string {
+    return this.configService.getOrThrow<string>('app.name')
+  }
+
+  get appEnv(): string {
+    return this.configService.getOrThrow<string>('app.env')
+  }
+
   get apiUrl(): string {
     return this.configService.getOrThrow<string>('services.chain.apiUrl')
   }

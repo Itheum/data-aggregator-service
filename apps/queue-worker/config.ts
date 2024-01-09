@@ -1,4 +1,8 @@
 export const config = () => ({
+  app: {
+    name: process.env.APP_NAME || 'aggregator',
+    env: process.env.APP_ENV || 'mainnet',
+  },
   features: {
     queueWorker: {
       enabled: process.env.QUEUE_WORKER_ENABLED !== 'false',
