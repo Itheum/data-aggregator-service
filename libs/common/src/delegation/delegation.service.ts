@@ -31,4 +31,12 @@ export class DelegationService {
 
     return delegations || []
   }
+
+  async getDelegationsBySegment(app: AppInfo, segment: string): Promise<Delegation[]> {
+    const cacheInfo = CacheInfo.AppDelegations(app)
+    const delegations = await this.cacheService.get<Delegation[]>(cacheInfo.key)
+    const filtered = delegations?.filter((del) => del.segment === segment) || []
+
+    return filtered
+  }
 }

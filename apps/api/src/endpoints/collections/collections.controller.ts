@@ -25,14 +25,16 @@ export class CollectionsController {
   @ApiResponse({ status: 200 })
   @ApiResponse({ status: 404 })
   async show(@Param('collection') key: string, @Headers('app-id') appId: number) {
-    console.log('key', key)
     const app = await this.appService.getAppById(+appId)
 
     if (!app) {
       throw new NotFoundException('App not found')
     }
 
-    const delegations = await this.delegationService.getDelegations(app)
+    const delegations = key
+      ? await this.delegationService.getDelegationsBySegment(app, key)
+      : await this.delegationService.getDelegations(app)
+
     const values = delegations.map((del) => DataValue.fromDelegation(del))
 
     return values
