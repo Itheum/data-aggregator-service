@@ -21,6 +21,23 @@ export class CollectionsController {
   }
 
   // TODO: @UseGuards(NativeAuthGuard)
+  @Get('apps/:appid/collections')
+  @ApiResponse({ status: 200 })
+  @ApiResponse({ status: 404 })
+  async showAll(@Param('appid') appId: string) {
+    const app = await this.appService.getAppById(+appId)
+
+    if (!app) {
+      throw new NotFoundException('App not found')
+    }
+
+    const delegations = await this.delegationService.getDelegations(app)
+    const values = delegations.map((del) => DataValue.fromDelegation(del))
+
+    return values
+  }
+
+  // TODO: @UseGuards(NativeAuthGuard)
   @Get('apps/:appid/collections/:collection')
   @ApiResponse({ status: 200 })
   @ApiResponse({ status: 404 })
