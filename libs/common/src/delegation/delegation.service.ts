@@ -20,7 +20,7 @@ export class DelegationService {
     const delegations = await this.contractService.getAppDelegations(app.id)
 
     const cacheInfo = CacheInfo.AppDelegations(app)
-    this.cacheService.set(cacheInfo.key, delegations, cacheInfo.ttl)
+    await this.cacheService.set(cacheInfo.key, delegations, cacheInfo.ttl)
 
     this.logger.log(`Synced ${delegations.length} delegations for app ${app.id}`)
   }

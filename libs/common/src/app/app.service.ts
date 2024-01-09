@@ -19,7 +19,7 @@ export class AppService {
     const apps = await this.contractService.getApps()
 
     const cacheInfo = CacheInfo.Apps()
-    this.cacheService.set(cacheInfo.key, apps, cacheInfo.ttl)
+    await this.cacheService.set(cacheInfo.key, apps, cacheInfo.ttl)
 
     this.logger.log(`Synced ${apps.length} apps`)
   }

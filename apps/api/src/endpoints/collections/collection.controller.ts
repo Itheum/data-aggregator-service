@@ -14,7 +14,7 @@ export class CollectionsController {
   // TODO: @UseGuards(NativeAuthGuard)
   @Get('/collections')
   @ApiResponse({ status: 200 })
-  async index(@Param('collection') key: string): Promise<unknown> {
+  index(@Param('collection') key: string) {
     return JSON.stringify({
       collection: key,
     })
@@ -24,7 +24,7 @@ export class CollectionsController {
   @Get('/collections/:collection')
   @ApiResponse({ status: 200 })
   @ApiResponse({ status: 404 })
-  async show(@Param('collection') key: string, @Headers('app-id') appId: number): Promise<unknown> {
+  async show(@Param('collection') key: string, @Headers('app-id') appId: number) {
     console.log('key', key)
     const app = await this.appService.getAppById(+appId)
 
