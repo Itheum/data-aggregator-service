@@ -7,22 +7,29 @@ export class CacheInfo {
 
   static Apps(): CacheInfo {
     return {
-      key: 'apps',
+      key: this.toScopedKey('apps'),
       ttl: Constants.oneMonth() * 12,
     }
   }
 
   static AppDelegations(app: AppInfo): CacheInfo {
     return {
-      key: `appDelegations:${app.id}`,
+      key: this.toScopedKey(`appDelegations:${app.id}`),
       ttl: Constants.oneMonth() * 12,
     }
   }
 
   static LastProcessedNonce(shardId: number): CacheInfo {
     return {
-      key: `lastProcessedNonce:${shardId}`,
+      key: this.toScopedKey(`lastProcessedNonce:${shardId}`),
       ttl: Constants.oneMonth(),
     }
+  }
+
+  private static toScopedKey(name: string): string {
+    const appName = process.env.APP_NAME || 'multiversx'
+    const appEnv = process.env.APP_ENV || 'dev'
+
+    return `cache:${appName}:${appEnv}:${name}`
   }
 }
