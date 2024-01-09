@@ -86,8 +86,9 @@ async function bootstrap() {
   const pubSubApp = await NestFactory.createMicroservice<MicroserviceOptions>(PubSubListenerModule.forRoot(config), {
     transport: Transport.REDIS,
     options: {
-      host: appConfigService.redisUrl,
-      port: 6379,
+      host: appConfigService.redisHost,
+      port: appConfigService.redisPort,
+      password: appConfigService.redisPassword || undefined,
       retryAttempts: 100,
       retryDelay: 1000,
       retryStrategy: () => 1000,

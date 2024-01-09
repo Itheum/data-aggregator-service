@@ -25,8 +25,9 @@ export class DynamicModuleUtils {
       useFactory: (appConfigService: AppConfigService) =>
         new RedisCacheModuleOptions(
           {
-            host: appConfigService.redisUrl,
+            host: appConfigService.redisHost,
             port: appConfigService.redisPort,
+            password: appConfigService.redisPassword || undefined,
           },
           {
             poolLimit: appConfigService.poolLimit,
@@ -65,8 +66,9 @@ export class DynamicModuleUtils {
         const clientOptions: ClientOptions = {
           transport: Transport.REDIS,
           options: {
-            host: appConfigService.redisUrl,
-            port: 6379,
+            host: appConfigService.redisHost,
+            port: appConfigService.redisPort,
+            password: appConfigService.redisPassword || undefined,
             retryDelay: 1000,
             retryAttempts: 10,
             retryStrategy: () => 1000,

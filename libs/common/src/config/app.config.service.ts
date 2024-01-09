@@ -28,22 +28,16 @@ export class AppConfigService {
     return this.configService.getOrThrow<string[]>('services.swagger.urls')
   }
 
-  get redisUrl(): string {
-    return this.configService.getOrThrow<string>('services.redis.url')
-  }
-
   get redisHost(): string {
-    return this.redisUrl.split(':')[0]
+    return this.configService.getOrThrow<string>('services.redis.host')
   }
 
   get redisPort(): number {
-    const components = this.redisUrl.split(':')
+    return this.configService.getOrThrow<number>('services.redis.port')
+  }
 
-    if (components.length > 1) {
-      return Number(components[1])
-    }
-
-    return 6379
+  get redisPassword(): string | null {
+    return this.configService.get<string>('services.redis.password') || null
   }
 
   get isPublicApiFeatureActive(): boolean {

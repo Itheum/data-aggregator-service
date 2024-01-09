@@ -8,8 +8,9 @@ import { AppConfigModule, AppConfigService } from '@mvx-monorepo/common'
     BullModule.forRootAsync({
       useFactory: (appConfigService: AppConfigService) => ({
         redis: {
-          host: appConfigService.redisUrl,
-          port: 6379,
+          host: appConfigService.redisHost,
+          port: appConfigService.redisPort,
+          password: appConfigService.redisPassword || undefined,
         },
       }),
       imports: [AppConfigModule.forRoot(config)],
