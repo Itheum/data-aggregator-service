@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common'
-import { ApiConfigService } from '../config'
+import { AppConfigService } from '../config'
 import { UserSigner } from '@multiversx/sdk-wallet'
 import { Account, Transaction } from '@multiversx/sdk-core'
 
@@ -8,9 +8,7 @@ export class AdminService {
   public readonly signer: UserSigner
   public readonly account: Account
 
-  constructor(
-    private readonly apiConfigService: ApiConfigService,
-  ) {
+  constructor(private readonly appConfigService: AppConfigService) {
     this.signer = UserSigner.fromPem('####')
     this.account = new Account(this.signer.getAddress())
   }
@@ -22,13 +20,13 @@ export class AdminService {
 
     tx.setNonce(this.account.getNonceThenIncrement())
     await this.sign(tx)
-    await this.apiConfigService.getNetworkProvider().sendTransaction(tx)
+    await this.appConfigService.networkProvider.sendTransaction(tx)
   }
 
   async syncAccount() {
     console.log(`Syncing admin wallet ...`)
     const signerAddress = this.signer.getAddress()
-    const accountOnNetwork = await this.apiConfigService.getNetworkProvider().getAccount(signerAddress)
+    const accountOnNetwork = await this.appConfigService.networkProvider.getAccount(signerAddress)
     this.account.update(accountOnNetwork)
   }
 

@@ -1,26 +1,26 @@
 import 'module-alias/register'
 import { NestFactory } from '@nestjs/core'
 import { QueueWorkerModule } from './worker'
-import configuration from '../config/configuration'
+import { config } from 'apps/queue-worker/config'
 import { PrivateAppModule } from './private.app.module'
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston'
 import { MicroserviceOptions, Transport } from '@nestjs/microservices'
-import { ApiConfigService, PubSubListenerModule } from '@mvx-monorepo/common'
+import { AppConfigService, PubSubListenerModule } from '@mvx-monorepo/common'
 
 async function bootstrap() {
   const queueWorkerApp = await NestFactory.create(QueueWorkerModule)
-  const apiConfigService = queueWorkerApp.get<ApiConfigService>(ApiConfigService)
-  await queueWorkerApp.listen(apiConfigService.getQueueWorkerFeaturePort())
+  const appConfigService = queueWorkerApp.get<AppConfigService>(AppConfigService)
+  await queueWorkerApp.listen(appConfigService.queueWorkerFeaturePort)
 
-  if (apiConfigService.getIsPrivateApiFeatureActive()) {
+  if (appConfigService.isPrivateApiFeatureActive) {
     const privateApp = await NestFactory.create(PrivateAppModule)
-    await privateApp.listen(apiConfigService.getPrivateApiFeaturePort())
+    await privateApp.listen(appConfigService.privateApiFeaturePort)
   }
 
-  const pubSubApp = await NestFactory.createMicroservice<MicroserviceOptions>(PubSubListenerModule.forRoot(configuration), {
+  const pubSubApp = await NestFactory.createMicroservice<MicroserviceOptions>(PubSubListenerModule.forRoot(config), {
     transport: Transport.REDIS,
     options: {
-      host: apiConfigService.getRedisUrl(),
+      host: appConfigService.redisUrl,
       port: 6379,
       retryAttempts: 100,
       retryDelay: 1000,

@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common'
-import { ApiConfigService } from './api.config.service'
+import { AppConfigService } from './app.config.service'
 import { ErdnestConfigService } from '@multiversx/sdk-nestjs-common'
 
 @Injectable()
 export class SdkNestjsConfigServiceImpl implements ErdnestConfigService {
-  constructor(private readonly apiConfigService: ApiConfigService) {}
+  constructor(private readonly appConfigService: AppConfigService) {}
 
   getSecurityAdmins(): string[] {
-    return this.apiConfigService.getSecurityAdmins()
+    return this.appConfigService.securityAdmins
   }
 
   getJwtSecret(): string {
@@ -15,14 +15,14 @@ export class SdkNestjsConfigServiceImpl implements ErdnestConfigService {
   }
 
   getApiUrl(): string {
-    return this.apiConfigService.getApiUrl()
+    return this.appConfigService.apiUrl
   }
 
   getNativeAuthMaxExpirySeconds(): number {
-    return this.apiConfigService.getNativeAuthMaxExpirySeconds()
+    return this.appConfigService.nativeAuthMaxExpirySeconds
   }
 
   getNativeAuthAcceptedOrigins(): string[] {
-    return this.apiConfigService.getNativeAuthAcceptedOrigins()
+    return this.appConfigService.nativeAuthAcceptedOrigins
   }
 }

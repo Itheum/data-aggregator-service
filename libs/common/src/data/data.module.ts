@@ -1,13 +1,13 @@
 import { Module } from '@nestjs/common'
 import { DataService } from './data.service'
-import { ApiConfigModule, DynamicModuleUtils } from '@mvx-monorepo/common'
+import { AppConfigModule, DynamicModuleUtils } from '@mvx-monorepo/common'
 
 @Module({})
 export class DataModule {
-  static forRoot(configuration: () => Record<string, any>) {
+  static forRoot(config: () => any) {
     return {
       module: DataModule,
-      imports: [ApiConfigModule.forRoot(configuration), DynamicModuleUtils.getCachingModule(configuration)],
+      imports: [AppConfigModule.forRoot(config), DynamicModuleUtils.getCachingModule(config)],
       providers: [DataService],
       exports: [DataService],
     }

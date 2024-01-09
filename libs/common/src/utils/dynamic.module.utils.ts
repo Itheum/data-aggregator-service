@@ -1,53 +1,53 @@
+import { DynamicModule, Provider } from '@nestjs/common'
 import { ERDNEST_CONFIG_SERVICE } from '@multiversx/sdk-nestjs-common'
+import { ApiModule, ApiModuleOptions } from '@multiversx/sdk-nestjs-http'
 import { ElasticModule, ElasticModuleOptions } from '@multiversx/sdk-nestjs-elastic'
 import { CacheModule, RedisCacheModuleOptions } from '@multiversx/sdk-nestjs-cache'
-import { DynamicModule, Provider } from '@nestjs/common'
 import { ClientOptions, ClientProxyFactory, Transport } from '@nestjs/microservices'
-import { ApiConfigModule, ApiConfigService, SdkNestjsConfigServiceImpl } from '../config'
-import { ApiModule, ApiModuleOptions } from '@multiversx/sdk-nestjs-http'
+import { AppConfigModule, AppConfigService, SdkNestjsConfigServiceImpl } from '../config'
 
 export class DynamicModuleUtils {
-  static getElasticModule(configuration: () => Record<string, any>): DynamicModule {
+  static getElasticModule(config: () => any): DynamicModule {
     return ElasticModule.forRootAsync({
-      imports: [ApiConfigModule.forRoot(configuration)],
-      useFactory: (apiConfigService: ApiConfigService) =>
+      imports: [AppConfigModule.forRoot(config)],
+      useFactory: (appConfigService: AppConfigService) =>
         new ElasticModuleOptions({
-          url: apiConfigService.getElasticUrl(),
+          url: appConfigService.elasticUrl,
           customValuePrefix: 'api',
         }),
-      inject: [ApiConfigService],
+      inject: [AppConfigService],
     })
   }
 
-  static getCachingModule(configuration: () => Record<string, any>): DynamicModule {
+  static getCachingModule(config: () => any): DynamicModule {
     return CacheModule.forRootAsync({
-      imports: [ApiConfigModule.forRoot(configuration)],
-      useFactory: (apiConfigService: ApiConfigService) =>
+      imports: [AppConfigModule.forRoot(config)],
+      useFactory: (appConfigService: AppConfigService) =>
         new RedisCacheModuleOptions(
           {
-            host: apiConfigService.getRedisUrl(),
-            port: apiConfigService.getRedisPort(),
+            host: appConfigService.redisUrl,
+            port: appConfigService.redisPort,
           },
           {
-            poolLimit: apiConfigService.getPoolLimit(),
-            processTtl: apiConfigService.getProcessTtl(),
+            poolLimit: appConfigService.poolLimit,
+            processTtl: appConfigService.processTtl,
           }
         ),
-      inject: [ApiConfigService],
+      inject: [AppConfigService],
     })
   }
 
-  static getApiModule(configuration: () => Record<string, any>): DynamicModule {
+  static getApiModule(config: () => any): DynamicModule {
     return ApiModule.forRootAsync({
-      imports: [ApiConfigModule.forRoot(configuration)],
-      useFactory: (apiConfigService: ApiConfigService) =>
+      imports: [AppConfigModule.forRoot(config)],
+      useFactory: (appConfigService: AppConfigService) =>
         new ApiModuleOptions({
-          axiosTimeout: apiConfigService.getAxiosTimeout(),
-          rateLimiterSecret: apiConfigService.getRateLimiterSecret(),
-          serverTimeout: apiConfigService.getServerTimeout(),
-          useKeepAliveAgent: apiConfigService.getUseKeepAliveAgentFlag(),
+          axiosTimeout: appConfigService.axiosTimeout,
+          rateLimiterSecret: appConfigService.rateLimiterSecret,
+          serverTimeout: appConfigService.serverTimeout,
+          useKeepAliveAgent: appConfigService.useKeepAliveAgentFlag,
         }),
-      inject: [ApiConfigService],
+      inject: [AppConfigService],
     })
   }
 
@@ -61,11 +61,11 @@ export class DynamicModuleUtils {
   static getPubSubService(): Provider {
     return {
       provide: 'PUBSUB_SERVICE',
-      useFactory: (apiConfigService: ApiConfigService) => {
+      useFactory: (appConfigService: AppConfigService) => {
         const clientOptions: ClientOptions = {
           transport: Transport.REDIS,
           options: {
-            host: apiConfigService.getRedisUrl(),
+            host: appConfigService.redisUrl,
             port: 6379,
             retryDelay: 1000,
             retryAttempts: 10,
@@ -75,7 +75,7 @@ export class DynamicModuleUtils {
 
         return ClientProxyFactory.create(clientOptions)
       },
-      inject: [ApiConfigService],
+      inject: [AppConfigService],
     }
   }
 }

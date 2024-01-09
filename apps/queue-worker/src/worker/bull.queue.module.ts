@@ -1,19 +1,19 @@
 import { Module } from '@nestjs/common'
 import { BullModule } from '@nestjs/bull'
-import configuration from '../../config/configuration'
-import { ApiConfigModule, ApiConfigService } from '@mvx-monorepo/common'
+import { config } from 'apps/queue-worker/config'
+import { AppConfigModule, AppConfigService } from '@mvx-monorepo/common'
 
 @Module({
   imports: [
     BullModule.forRootAsync({
-      useFactory: (apiConfigService: ApiConfigService) => ({
+      useFactory: (appConfigService: AppConfigService) => ({
         redis: {
-          host: apiConfigService.getRedisUrl(),
+          host: appConfigService.redisUrl,
           port: 6379,
         },
       }),
-      imports: [ApiConfigModule.forRoot(configuration)],
-      inject: [ApiConfigService],
+      imports: [AppConfigModule.forRoot(config)],
+      inject: [AppConfigService],
     }),
   ],
 })

@@ -1,1 +1,1 @@
-web: npm run start:mainnet
+web: npm run start

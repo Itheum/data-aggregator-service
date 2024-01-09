@@ -1,7 +1,7 @@
 import { AppInfo } from '../app'
 import { Delegation } from '../delegation'
 import { Injectable } from '@nestjs/common'
-import { ApiConfigService } from '../config'
+import { AppConfigService } from '../config'
 import { CacheService } from '@multiversx/sdk-nestjs-cache'
 import { toTypedAppInfo, toTypedDelegation } from './helpers'
 import * as aggregatorAbiJson from './data-aggregator.abi.json'
@@ -10,7 +10,7 @@ import { AbiRegistry, Address, ResultsParser, SmartContract } from '@multiversx/
 @Injectable()
 export class ContractService {
   constructor(
-    private readonly apiConfigService: ApiConfigService,
+    private readonly appConfigService: AppConfigService,
     protected readonly cacheService: CacheService
   ) {}
 
@@ -31,10 +31,10 @@ export class ContractService {
   private async queryContract(endpoint: string, args: any[]) {
     const abi = AbiRegistry.create(aggregatorAbiJson)
 
-    const contractAddress = new Address(this.apiConfigService.getAggregatorContractAddress())
+    const contractAddress = new Address(this.appConfigService.aggregatorContractAddress)
     const contract = new SmartContract({ address: contractAddress, abi })
     const interaction = contract.methods[endpoint](args)
-    const res = await this.apiConfigService.getNetworkProvider().queryContract(interaction.buildQuery())
+    const res = await this.appConfigService.networkProvider.queryContract(interaction.buildQuery())
     const parsed = new ResultsParser().parseQueryResponse(res, interaction.getEndpoint())
 
     return parsed.firstValue?.valueOf()
