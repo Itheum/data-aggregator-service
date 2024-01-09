@@ -13,6 +13,9 @@ export const config = () => ({
       port: parseInt(process.env.PRIVATE_API_PORT || '4000'),
     },
   },
+  contracts: {
+    aggregator: process.env.CONTRACT_AGGREGATOR || '####',
+  },
   services: {
     swagger: {
       urls: [process.env.SWAGGER_URL || 'https://aggregator.example.com'],
