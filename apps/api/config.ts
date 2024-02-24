@@ -2,6 +2,7 @@ export const config = () => ({
   app: {
     name: process.env.APP_NAME || 'aggregator',
     env: process.env.APP_ENV || 'mainnet',
+    url: process.env.APP_DOMAIN || 'https://itheum.io',
   },
   features: {
     publicApi: {
@@ -22,8 +23,12 @@ export const config = () => ({
     },
     chain: {
       apiUrl: process.env.CHAIN_API_URL || 'https://api.multiversx.com',
+      wallet: {
+        admin: process.env.WALLET_ADMIN_PEM || '####',
+      },
       nativeAuth: {
-        acceptedOrigins: ['https://utils.multiversx.com'],
+        maxExpirySeconds: 3600,
+        acceptedOrigins: ['https://itheum.io', 'https://utils.multiversx.com'],
       },
     },
     redis: {
