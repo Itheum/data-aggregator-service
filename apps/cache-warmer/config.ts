@@ -17,6 +17,12 @@ export const config = () => ({
     aggregator: process.env.CONTRACT_AGGREGATOR || '####',
   },
   services: {
+    chain: {
+      apiUrl: process.env.CHAIN_API_URL || 'https://api.multiversx.com',
+      nativeAuth: {
+        acceptedOrigins: ['https://utils.multiversx.com'],
+      },
+    },
     redis: {
       host: process.env.REDIS_HOST || '127.0.0.1',
       port: parseInt(process.env.REDIS_PORT || '6379'),

@@ -1,7 +1,9 @@
+import { config } from 'apps/api/config'
 import { Injectable } from '@nestjs/common'
 import { AppConfigService } from '../config'
 import { UserSigner } from '@multiversx/sdk-wallet'
-import { Account, Transaction } from '@multiversx/sdk-core'
+import { Account, SignableMessage, Transaction } from '@multiversx/sdk-core'
+import { NativeAuthClient } from '@multiversx/sdk-native-auth-client'
 
 @Injectable()
 export class AdminService {
@@ -9,7 +11,7 @@ export class AdminService {
   public readonly account: Account
 
   constructor(private readonly appConfigService: AppConfigService) {
-    this.signer = UserSigner.fromPem('####')
+    this.signer = UserSigner.fromPem(config().services.chain.wallet.admin)
     this.account = new Account(this.signer.getAddress())
   }
 
@@ -36,5 +38,21 @@ export class AdminService {
     tx.applySignature(signature)
 
     return tx
+  }
+
+  async generateNativeAuthToken() {
+    const client = new NativeAuthClient({
+      apiUrl: config().services.chain.apiUrl,
+      expirySeconds: config().services.chain.nativeAuth.maxExpirySeconds,
+      origin: config().app.url,
+    })
+
+    const init = await client.initialize()
+    const address = this.account.address.bech32()
+    const signable = new SignableMessage({ message: Buffer.from(`${address}${init}`) })
+    const signature = await this.signer.sign(signable.serializeForSigning())
+    const signatureHex = signature.toString('hex')
+
+    return client.getToken(address, init, signatureHex)
   }
 }

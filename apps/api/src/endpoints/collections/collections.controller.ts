@@ -1,6 +1,6 @@
 import { ApiResponse } from '@nestjs/swagger'
-import { AppService } from '@mvx-monorepo/common'
 import { DataValue } from './entities/data.value'
+import { AppService, DataService } from '@mvx-monorepo/common'
 import { DelegationService } from '@mvx-monorepo/common/delegation'
 import { Controller, Get, NotFoundException, Param } from '@nestjs/common'
 
@@ -8,7 +8,8 @@ import { Controller, Get, NotFoundException, Param } from '@nestjs/common'
 export class CollectionsController {
   constructor(
     private readonly appService: AppService,
-    private readonly delegationService: DelegationService
+    private readonly delegationService: DelegationService,
+    private readonly dataService: DataService
   ) {}
 
   // TODO: @UseGuards(NativeAuthGuard)
@@ -32,7 +33,9 @@ export class CollectionsController {
     }
 
     const delegations = await this.delegationService.getDelegations(app)
-    const values = delegations.map((del) => DataValue.fromDelegation(del))
+    const unlockedDelegations = await this.dataService.unlockDelegationData(delegations)
+
+    const values = unlockedDelegations.map((del) => DataValue.fromDelegation(del))
 
     return values
   }
@@ -52,7 +55,9 @@ export class CollectionsController {
       ? await this.delegationService.getDelegationsBySegment(app, key)
       : await this.delegationService.getDelegations(app)
 
-    const values = delegations.map((del) => DataValue.fromDelegation(del))
+    const unlockedDelegations = await this.dataService.unlockDelegationData(delegations)
+
+    const values = unlockedDelegations.map((del) => DataValue.fromDelegation(del))
 
     return values
   }
